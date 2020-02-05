@@ -13,6 +13,10 @@ const defaultAddress = '0x0000000000000000000000000000000000000000';
 const myAddress = '0x0c50ecD06DFF8C22A9aFC80356d5d7f39921E882';
 const RIFAddress = '0x19f64674d8a5b4e652319f5e239efd3bc969a1fe';
 
+if (process.argv.length !== 3) {
+  console.error('Input must be a name');
+  process.exit();
+}
 
 function getOwner(_rnsInstance, _domainName) {
   return _rnsInstance.methods.owner(namehash.hash(`${_domainName}.rsk`)).call({});
@@ -43,18 +47,18 @@ const fifsInstance = new web3.eth.Contract(
 const rnsAddress = '0x7d284aaac6e925aad802a53c0c69efe3764597b8';
 const rnsInstance = new web3.eth.Contract(RNS, rnsAddress);
 
-const domainNameToReg = 'tinyyxx03';
+const domainNameToReg = process.argv[2];
 
 getOwner(rnsInstance, domainNameToReg).then((isRegistered) => {
   if (isRegistered !== defaultAddress) {
     throw new Error('This domain has already been registered!');
   }
   return fifsInstance.methods.makeCommitment(`0x${sha3(domainNameToReg)}`, myAddress, web3.utils.toHex('azjieqw1')).call((error, hashCommit) => {
-    if (error) console.error(error);
+    if (error) console.error(`makeCommitment fail : ${error}`);
     console.log(hashCommit);
     return fifsInstance.methods.commit(hashCommit).send(async (_error, result) => {
       if (_error) {
-        console.error('commit', _error);
+        console.error('commit fail : ', _error);
       }
       console.log('commit result', result); // 0xc1c16e0cd663a25945da86da4ccc4f5c506fc4349853bd17784c6ea442d1e6f3
       await delay(60);
@@ -73,6 +77,8 @@ getOwner(rnsInstance, domainNameToReg).then((isRegistered) => {
       });
     });
   });
+}).catch((err) => {
+  console.error(err.message);
 });
 
 
