@@ -1,4 +1,5 @@
 const web3 = require('web3');
+const namehash = require('eth-ens-namehash');
 
 function numberToUint32(number) {
   const hexDuration = web3.utils.numberToHex(number);
@@ -90,8 +91,20 @@ function getAddrRegisterData(name, owner, secret, duration, addr) {
   return `${_signature}${_owner}${_secret}${_duration}${_addr}${_name}`;
 }
 
+function getOwner(_rnsInstance, _domainName) {
+  return _rnsInstance.methods.owner(namehash.hash(`${_domainName}.rsk`)).call({});
+}
+
+function delay(time) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time * 1000);
+  });
+}
+
 module.exports = {
   getRegisterData,
   getRenewData,
   getAddrRegisterData,
+  getOwner,
+  delay,
 };
