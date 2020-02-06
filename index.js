@@ -51,8 +51,8 @@ getOwner(rnsInstance, domainNameToReg).then((isRegistered) => {
         console.error('commit fail : ', _error);
       }
       console.log('commit result', result); // 0xc1c16e0cd663a25945da86da4ccc4f5c506fc4349853bd17784c6ea442d1e6f3
-      // wait 60s according to docs https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/
-      await delay(60);
+      // wait 120s according to docs https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/
+      await delay(120);
       const rif = new web3.eth.Contract(
         RIF, RIFAddress, { from: myAddress },
       );
