@@ -38,7 +38,7 @@ const mnemonic = 'fabric arrest space cost embark tell pear balance title girl p
  * @param {*} address address
  * @param {*} data data
  */
-async function makeCommitment(fifsInstance, domainNameToRegister, address, data) {
+function makeCommitment(fifsInstance, domainNameToRegister, address, data) {
   return new Promise((resolve, reject) => {
     fifsInstance.methods.makeCommitment(`0x${sha3(domainNameToRegister)}`, address, data)
       .call((error, hashCommit) => {
@@ -58,7 +58,7 @@ async function makeCommitment(fifsInstance, domainNameToRegister, address, data)
  * @param {*} address address
  * @param {*} data data
  */
-async function sendCommitment(fifsInstance, commitmentHash) {
+function sendCommitment(fifsInstance, commitmentHash) {
   return new Promise((resolve, reject) => {
     fifsInstance.methods.commit(commitmentHash)
       .send(async (error, result) => {
@@ -75,7 +75,7 @@ async function sendCommitment(fifsInstance, commitmentHash) {
  *
  * @param {*} param0
  */
-async function makeRIFPayment({
+function makeRIFPayment({
   rifInstance, to, value, data,
 }) {
   return new Promise((resolve, reject) => {
