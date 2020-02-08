@@ -89,16 +89,6 @@ async function makeRIFPayment({
   });
 }
 
-
-async function ask(questions) {
-
-
-  // const answer = answers[questions.name];
-  // console.log('answer', answer);
-
-  // ask();
-}
-
 /**
  * Main entrance
  */
@@ -146,7 +136,7 @@ async function main() {
     console.log(`${chalk.green('success ')}Confirmed hash ${sendResult}`);
 
     // wait 1 sec according to docs https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/
-    await delay(1000);
+    await delay(5000);
 
     const value = (2 * (10 ** 18)).toString();
     const registerParams = {
@@ -175,36 +165,3 @@ async function main() {
 }
 
 main();
-
-// getOwner(rnsInstance, domainNameToRegister).then((isRegistered) =>
-//   // call makeCommitment() to get hashCommit
-//   fifsInstance.methods.makeCommitment(`0x${sha3(domainNameToRegister)}`, walletAddress, web3.utils.toHex('azjieqw1')).call((error, hashCommit) => {
-//     if (error) console.error(`makeCommitment fail : ${error}`);
-//     console.log(hashCommit);
-//     // call commit() to commit hashCommit
-//     return fifsInstance.methods.commit(hashCommit).send(async (_error, result) => {
-//       if (_error) {
-//         console.error('commit fail : ', _error);
-//       }
-//       console.log('commit result', result); // 0xc1c16e0cd663a25945da86da4ccc4f5c506fc4349853bd17784c6ea442d1e6f3
-//       // wait 120s according to docs https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/
-//       await delay(120);
-//       const rif = new web3.eth.Contract(
-//         RIF, RIF_ADDRESS, { from: walletAddress },
-//       );
-//       const weiValue = 2 * (10 ** 18);
-//       const durationBN = new BigNumber(1);
-//       const secret = web3.utils.toHex('azjieqw1');
-//       const data = getRegisterData(domainNameToRegister, walletAddress, web3.utils.toHex('azjieqw1'), durationBN);
-
-//       rif.methods.transferAndCall(FIFS_ADDRESS, weiValue.toString(), data).send((tranferError, transferResult) => {
-//         console.warn(`rif.methods.transferAndCall(${FIFS_ADDRESS}, ${weiValue.toString()}, ${data}) ==> return`, transferResult);
-//         if (tranferError) {
-//           console.error(`transferAndCall fail : ${tranferError}`);
-//         }
-//         console.log(result);
-//       });
-//     });
-//   })).catch((err) => {
-//   console.error(err.message);
-// });
