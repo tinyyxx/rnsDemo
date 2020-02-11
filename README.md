@@ -1,5 +1,8 @@
 # RNS Demo
 
+## Smart Contract Instructions
+[https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/](https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/)
+
 ## Smart Contract ABIs
 ### FIFSRegistrar
 [https://explorer.rsk.co/address/0xcb868aeabd31e2b66f74e9a55cf064abb31a4ad5?__ctab=Code](https://explorer.rsk.co/address/0xcb868aeabd31e2b66f74e9a55cf064abb31a4ad5?__ctab=Code)
