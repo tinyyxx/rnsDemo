@@ -1,19 +1,17 @@
-# `The abi json file comes from following address`
+# RNS Demo
 
-## FIFSRegistrar
-https://explorer.rsk.co/address/0xcb868aeabd31e2b66f74e9a55cf064abb31a4ad5?__ctab=Code
+## Smart Contract ABIs
+### FIFSRegistrar
+[https://explorer.rsk.co/address/0xcb868aeabd31e2b66f74e9a55cf064abb31a4ad5?__ctab=Code](https://explorer.rsk.co/address/0xcb868aeabd31e2b66f74e9a55cf064abb31a4ad5?__ctab=Code)
 
-## RNS 
-https://explorer.rsk.co/address/0x99a12be4c89cbf6cfd11d1f2c029904a7b644368?__ctab=Code
+### RNS 
+[https://explorer.rsk.co/address/0x99a12be4c89cbf6cfd11d1f2c029904a7b644368?__ctab=Code](https://explorer.rsk.co/address/0x99a12be4c89cbf6cfd11d1f2c029904a7b644368?__ctab=Code)
 
-# `Usage`
+## Install
+1. `git clone` this repo
+1. `npm install`
 
-## Setup
-```
-npm i
-```
-
-## Run
+## Start the application
 ```
 node index.js [name]
 ```
