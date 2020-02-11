@@ -5,8 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "@truffle/hdwallet-provider": "^1.0.30",
+    "babel-eslint": "^10.0.3",
+    "bignumber.js": "^9.0.0",
     "chalk": "^3.0.0",
     "crypto": "^1.0.1",
+    "eslint-config-airbnb-base": "^14.0.0",
     "eth-ens-namehash": "^2.0.8",
     "inquirer": "^7.0.4",
     "js-sha3": "^0.8.0",
