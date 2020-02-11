@@ -97,8 +97,17 @@ function getOwner(_rnsInstance, _domainName) {
 
 function delay(time) {
   return new Promise((resolve) => {
-    setTimeout(resolve, time * 1000);
+    setTimeout(resolve, time);
   });
+}
+
+function getCost(fifsInstance, domain, duration) {
+  return new Promise(((resolve) => {
+    fifsInstance.methods.price(domain, 0, duration).call((err, cost) => {
+      if (err) return resolve(err);
+      return resolve(cost);
+    });
+  }));
 }
 
 module.exports = {
@@ -107,4 +116,6 @@ module.exports = {
   getAddrRegisterData,
   getOwner,
   delay,
+  getCost
 };
+

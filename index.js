@@ -5,7 +5,9 @@ const BigNumber = require('bignumber.js');
 const FIFSRegistrar = require('./abi/FIFSRegistrar.json');
 const RNS = require('./abi/RNS.json');
 const RIF = require('./abi/RIF');
-const { getRegisterData, getOwner, delay } = require('./utils');
+const {
+  getRegisterData, getOwner, delay, getCost,
+} = require('./utils');
 
 const rskEndpoint = 'https://public-node.testnet.rsk.co';
 const defaultAddress = '0x0000000000000000000000000000000000000000';
@@ -23,9 +25,6 @@ const provider = new HDWalletProvider(mnemonic, rskEndpoint);
 // HDWalletProvider is compatible with Web3. Use it at Web3 constructor, just like any other Web3 Provider
 const web3 = new Web3(provider);
 
-// Or, if web3 is alreay initialized, you can call the 'setProvider' on web3, web3.eth, web3.shh and/or web3.bzz
-web3.setProvider(provider);
-
 const fifsAddress = '0x36ffda909f941950a552011f2c50569fda14a169';
 const fifsInstance = new web3.eth.Contract(
   FIFSRegistrar, fifsAddress, { from: myAddress },
@@ -35,6 +34,7 @@ const rnsAddress = '0x7d284aaac6e925aad802a53c0c69efe3764597b8';
 const rnsInstance = new web3.eth.Contract(RNS, rnsAddress);
 
 const domainNameToReg = process.argv[2];
+const secret = 'azjieqw1';
 
 getOwner(rnsInstance, domainNameToReg).then((isRegistered) => {
   // check if domain has been registered
@@ -42,7 +42,7 @@ getOwner(rnsInstance, domainNameToReg).then((isRegistered) => {
     throw new Error('This domain has already been registered!');
   }
   // call makeCommitment() to get hashCommit
-  return fifsInstance.methods.makeCommitment(`0x${sha3(domainNameToReg)}`, myAddress, web3.utils.toHex('azjieqw1')).call((error, hashCommit) => {
+  return fifsInstance.methods.makeCommitment(`0x${sha3(domainNameToReg)}`, myAddress, web3.utils.toHex(secret)).call((error, hashCommit) => {
     if (error) console.error(`makeCommitment fail : ${error}`);
     console.log(hashCommit);
     // call commit() to commit hashCommit
@@ -51,14 +51,28 @@ getOwner(rnsInstance, domainNameToReg).then((isRegistered) => {
         console.error('commit fail : ', _error);
       }
       console.log('commit result', result); // 0xc1c16e0cd663a25945da86da4ccc4f5c506fc4349853bd17784c6ea442d1e6f3
-      // wait 120s according to docs https://developers.rsk.co/rif/rns/architecture/rsk-registrar/registrars/fifs/
-      await delay(120);
+
+      let isReveal = false;
+      while (!isReveal) {
+        // eslint-disable-next-line no-await-in-loop
+        const revealResult = await fifsInstance.methods.canReveal(hashCommit).call();
+        console.log(revealResult);
+        // eslint-disable-next-line no-await-in-loop
+        await delay(3000);
+        if (revealResult) {
+          isReveal = true;
+        }
+      }
+
       const rif = new web3.eth.Contract(
         RIF, RIFAddress, { from: myAddress },
       );
-      const weiValue = 2 * (10 ** 18);
+      // const weiValue = 2 * (10 ** 18);
+
       const durationBN = new BigNumber(1);
-      const data = getRegisterData(domainNameToReg, myAddress, web3.utils.toHex('azjieqw1'), durationBN);
+      const data = getRegisterData(domainNameToReg, myAddress, web3.utils.toHex(secret), durationBN);
+
+      const weiValue = await getCost(fifsInstance, domainNameToReg, durationBN);
 
       rif.methods.transferAndCall(fifsAddress, weiValue.toString(), data).send((tranferError, transferResult) => {
         console.warn(`rif.methods.transferAndCall(${fifsAddress}, ${weiValue.toString()}, ${data}) ==> return`, transferResult);
