@@ -16,7 +16,5 @@
 
 ## Start the application
 ```
-node index.js [name]
+node start
 ```
-
-Input the `domain name`  you want to register.
