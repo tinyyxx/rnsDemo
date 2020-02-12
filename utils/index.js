@@ -103,6 +103,13 @@ function delay(time) {
   });
 }
 
+/**
+ * Calculates the price of a name, denominated in RIF.
+ * @param fifsInstance
+ * @param domain
+ * @param duration
+ * @returns {Promise<string>} price
+ */
 function getCost(fifsInstance, domain, duration) {
   return new Promise(((resolve) => {
     fifsInstance.methods.price(domain, 0, duration).call((err, cost) => {
@@ -135,6 +142,14 @@ function randomString(size, charRange) {
   return objectId;
 }
 
+/**
+ *  Create a commitment for register action
+ * @param fifsInstance
+ * @param domain
+ * @param address
+ * @param secret
+ * @returns {Promise<string>} commitment hash
+ */
 function makeCommitment(fifsInstance, domain, address, secret) {
   return new Promise((resolve, reject) => {
     fifsInstance.methods.makeCommitment(`0x${sha3(domain)}`, address, web3.utils.toHex(secret)).call((err, hashCommit) => {
@@ -144,6 +159,12 @@ function makeCommitment(fifsInstance, domain, address, secret) {
   });
 }
 
+/**
+ * Commit before registering a name
+ * @param fifsInstance
+ * @param hashCommit
+ * @returns {Promise<string>}
+ */
 function sendCommitment(fifsInstance, hashCommit) {
   return new Promise((resolve, reject) => {
     fifsInstance.methods.commit(hashCommit).send((err, result) => {
@@ -153,6 +174,14 @@ function sendCommitment(fifsInstance, hashCommit) {
   });
 }
 
+/**
+ * Perform a RIF token transfer and domain registration in a single transaction
+ * @param rifInstance
+ * @param fifsAddress
+ * @param weiValue
+ * @param data
+ * @returns {Promise<string>}
+ */
 function transferAndCall(rifInstance, fifsAddress, weiValue, data) {
   return new Promise(((resolve, reject) => {
     rifInstance.methods.transferAndCall(fifsAddress, weiValue.toString(), data).send((err, result) => {
