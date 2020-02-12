@@ -16,5 +16,5 @@
 
 ## Start the application
 ```
-node start
+npm start
 ```
