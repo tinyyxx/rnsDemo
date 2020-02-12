@@ -1,5 +1,7 @@
 const web3 = require('web3');
 const namehash = require('eth-ens-namehash');
+const { keccak_256: sha3 } = require('js-sha3');
+const { randomBytes } = require('crypto');
 
 function numberToUint32(number) {
   const hexDuration = web3.utils.numberToHex(number);
@@ -92,7 +94,7 @@ function getAddrRegisterData(name, owner, secret, duration, addr) {
 }
 
 function getOwner(_rnsInstance, _domainName) {
-  return _rnsInstance.methods.owner(namehash.hash(`${_domainName}.rsk`)).call({});
+  return _rnsInstance.methods.owner(namehash.hash(`${_domainName}.rsk`)).call();
 }
 
 function delay(time) {
@@ -110,12 +112,67 @@ function getCost(fifsInstance, domain, duration) {
   }));
 }
 
+// Returns a new random alphanumeric string of the given size.
+//
+// Note: to simplify implementation, the result has slight modulo bias,
+// because chars length of 62 doesn't divide the number of all bytes
+// (256) evenly. Such bias is acceptable for most cases when the output
+// length is long enough and doesn't need to be uniform.
+function randomString(size, charRange) {
+  if (size === 0) {
+    throw new Error('Zero-length randomString is useless.');
+  }
+
+  const chars = charRange || ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    + 'abcdefghijklmnopqrstuvwxyz'
+    + '0123456789');
+
+  let objectId = '';
+  const bytes = randomBytes(size);
+  for (let i = 0; i < bytes.length; i += 1) {
+    objectId += chars[bytes.readUInt8(i) % chars.length];
+  }
+  return objectId;
+}
+
+function makeCommitment(fifsInstance, domain, address, secret) {
+  return new Promise((resolve, reject) => {
+    fifsInstance.methods.makeCommitment(`0x${sha3(domain)}`, address, web3.utils.toHex(secret)).call((err, hashCommit) => {
+      if (err) return reject(err);
+      return resolve(hashCommit);
+    });
+  });
+}
+
+function sendCommitment(fifsInstance, hashCommit) {
+  return new Promise((resolve, reject) => {
+    fifsInstance.methods.commit(hashCommit).send((err, result) => {
+      if (err) return reject(err);
+      return resolve(result);
+    });
+  });
+}
+
+function transferAndCall(rifInstance, fifsAddress, weiValue, data) {
+  return new Promise(((resolve, reject) => {
+    rifInstance.methods.transferAndCall(fifsAddress, weiValue.toString(), data).send((err, result) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    });
+  }));
+}
+
 module.exports = {
   getRegisterData,
   getRenewData,
   getAddrRegisterData,
   getOwner,
   delay,
-  getCost
+  getCost,
+  makeCommitment,
+  sendCommitment,
+  transferAndCall,
+  randomString,
 };
-
