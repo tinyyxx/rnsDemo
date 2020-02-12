@@ -39,7 +39,7 @@ function getRegisterData(name, owner, secret, duration) {
   }
 
   // 32 bytes
-  _duration = numberToUint32(duration);
+  let _duration = numberToUint32(duration);
 
   // variable length
   const _name = utf8ToHexString(name);
