@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@rsksmart/rns": "^1.4.1",
     "@truffle/hdwallet-provider": "^1.0.30",
     "babel-eslint": "^10.0.3",
     "bignumber.js": "^9.0.0",
