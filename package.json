@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@rsksmart/rns": "^1.4.1",
+    "@rsksmart/rns": "^1.7.0",
     "@truffle/hdwallet-provider": "^1.0.30",
     "babel-eslint": "^10.0.3",
     "bignumber.js": "^9.0.0",
@@ -26,7 +26,9 @@
     "eslint-plugin-jsx-a11y": "^6.1.1"
   },
   "scripts": {
-    "start": "babel-node index.js --presets es2015,stage-3",
+    "resolution": "babel-node ./resolution/index.js --presets es2015,stage-3",
+    "subdomains": "babel-node ./subdomains/index.js --presets es2015,stage-3",
+    "reverse": "babel-node ./reverseLookup/index.js --presets es2015,stage-3",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
