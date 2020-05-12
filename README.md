@@ -6,6 +6,9 @@
 1. `npm run subdomains`
 1. `npm run reverse`
 
+## Registration
+### 1.Register an .rsk domain
+这个在包里没有实现，注册一级域名是在网页端操作的，我之前写的rnsDemo的代码就是实现了这个操作。
 
 ## Resolution
 ### 1. Resolve a domain address
