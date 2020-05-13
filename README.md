@@ -1,6 +1,13 @@
 # RNS Test
 
-Currently, some function of operation 
+Currently, some function of operation will fail to call with my code.
+
+1. **rns.setResolver** (tx returned by this function fail.)
+1. **rns.setAddr** (tx returned by this function fail.)
+1. **rns.subdomains.create** (stuck when executing, not return anything)
+1. **rns.subdomains.setOwner** (tx returned by this function fail.)
+
+The following is a detailed record using rns-js module. 
 
 ## Get Started
 1. `npm install`
